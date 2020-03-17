@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 # SPDX-FileCopyrightText: 2020 Nicolás Alvarez <nicolas.alvarez@gmail.com>
 #
 # SPDX-License-Identifier: MIT
@@ -42,8 +40,3 @@ def parse(filename):
 
         return None
 
-for fn in os.listdir('.'):
-    if fn.endswith('.txt'):
-        print(fn)
-        print(parse(fn))
-        print()
