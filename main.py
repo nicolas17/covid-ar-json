@@ -6,21 +6,24 @@
 
 import tempfile
 import json
+import logging
 
 import request
 import pdfconvert
 import textparser
 
-print("Downloading list")
+logging.basicConfig(level=logging.INFO)
+
+logging.info("Downloading list")
 pdf_urls = list(request.get_pdf_urls())
 pdf_url = pdf_urls[0]
-print("PDF URL: {}".format(pdf_url))
+logging.info("PDF URL: %s", pdf_url)
 with tempfile.NamedTemporaryFile(suffix='.pdf') as f:
     request.download_file(pdf_url, f)
-    print("File downloaded into {}".format(f.name))
+    logging.info("File downloaded into %s", f.name)
     text = pdfconvert.text_from_pdf(f.name)
-    print("Converted into {} bytes of text".format(len(text)))
+    logging.info("Converted into %d bytes of text", len(text))
 
 report = textparser.parse(text)
-output = {'cases': report.cases, 'deaths': report.deaths, 'source_pdf': pdf_url}
+output = {'cases': report.cases, 'deaths': report.deaths, 'source_url': pdf_url}
 print(json.dumps(output))
