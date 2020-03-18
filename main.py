@@ -15,6 +15,8 @@ import textparser
 
 logging.getLogger().setLevel(logging.INFO)
 
+s3 = boto3.client('s3')
+
 def handler(event, context):
     logging.info("Downloading list")
     pdf_urls = list(request.get_pdf_urls())
@@ -30,7 +32,6 @@ def handler(event, context):
     output = {'cases': report.cases, 'deaths': report.deaths, 'source_url': pdf_url}
     output_json = json.dumps(output).encode('utf8')
 
-    s3 = boto3.client('s3')
     logging.info("Getting current file from S3")
     current_obj = s3.get_object(Bucket='nicolas17', Key='covid-ar.json')
     current_data = current_obj['Body'].read()
