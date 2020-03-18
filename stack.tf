@@ -89,7 +89,7 @@ resource "aws_lambda_function" "update_covid_json" {
 resource "aws_cloudwatch_event_rule" "covid_cloudwatch_timer" {
   description = "Run Lambda function to update covid-ar.json"
 
-  schedule_expression = "rate(15 minutes)"
+  schedule_expression = "rate(60 minutes)"
 }
 
 resource "aws_cloudwatch_event_target" "cloudwatch_timer_target" {
