@@ -4,6 +4,7 @@
 
 import os
 import re
+import logging
 
 import attr
 
@@ -18,8 +19,10 @@ class Report:
 
 
 def handle_match(m):
+    logging.info("Matched sentence: '{}'".format(m.group(0)))
     cases = int(coalesce(m.group('c1'), m.group('c2')))
     deaths = int(coalesce(m.group('d1'), m.group('d2')))
+    logging.info("Extracted info: cases:{}, deaths:{}".format(cases, deaths))
     return Report(cases=cases, deaths=deaths)
 
 def num_regex(capture_name):
@@ -35,6 +38,8 @@ def parse(text):
     m = re.search('se registran un total de '+num_regex('c')+' casos importados confirmados de COVID-19 entre los que se encuentran? '+num_regex('d')+' fallecidos?', text)
     if m:
         return handle_match(m)
+
+    logging.warning("No regex matched!")
 
     return None
 
