@@ -27,7 +27,7 @@ def handler(event, context):
         logging.info("Converted into %d bytes of text", len(text))
 
     report = textparser.parse(text)
-    output = {'cases': report.cases, 'deaths': report.deaths, 'source_url': pdf_url, 'blah': 42}
+    output = {'cases': report.cases, 'deaths': report.deaths, 'source_url': pdf_url}
     output_json = json.dumps(output).encode('utf8')
 
     s3 = boto3.client('s3')
