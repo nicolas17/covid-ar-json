@@ -5,5 +5,5 @@
 import subprocess
 
 def text_from_pdf(filename):
-    proc = subprocess.run(['pdftotext', filename, '-'], capture_output=True)
+    proc = subprocess.run(['./pdftotext', filename, '-'], capture_output=True)
     return proc.stdout.decode('utf8')

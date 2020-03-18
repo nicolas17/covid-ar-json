@@ -13,7 +13,7 @@ import request
 import pdfconvert
 import textparser
 
-logging.basicConfig(level=logging.INFO)
+logging.getLogger().setLevel(logging.INFO)
 
 def handler(event, context):
     logging.info("Downloading list")
@@ -41,7 +41,7 @@ def handler(event, context):
         s3.put_object(Bucket='nicolas17', Key='covid-ar.json', ACL='public-read', ContentType='application/json', Body=output_json)
         logging.info("Done!")
 
-    return {'result': output_json}
+    return {'result': output}
 
 if __name__ == '__main__':
     print(handler({},{}))
