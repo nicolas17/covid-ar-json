@@ -62,6 +62,7 @@ add_custom_command(
 add_custom_command(OUTPUT function.zip
     DEPENDS ${destdir_pyfiles} destdir/pdftotext pip
     WORKING_DIRECTORY destdir
+    COMMAND cmake -E remove ${CMAKE_BINARY_DIR}/function.zip
     COMMAND zip -r ${CMAKE_BINARY_DIR}/function.zip .
 )
 add_custom_target(zip ALL DEPENDS function.zip)
