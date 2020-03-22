@@ -56,7 +56,13 @@ def handler(event, context):
         logging.info("Converted into %d bytes of text", len(text))
 
     report = textparser.parse(text)
-    output = {'cases': report.cases, 'deaths': report.deaths, 'source_url': pdf_url}
+    output = {
+        'cases': report.cases,
+        'deaths': report.deaths,
+        'new_cases_today': report.new_cases,
+        'date': pdf_date.strftime('%Y-%m-%d'),
+        'source_url': pdf_url
+    }
     output_json = json.dumps(output).encode('utf8')
 
     logging.info("Getting current file")
