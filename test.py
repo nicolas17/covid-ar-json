@@ -25,12 +25,16 @@ class TestParser(unittest.TestCase):
         do_test('veintiún (21)', None, '21')
 
     def test_parser(self):
-        self.assertEqual(parse("El total de casos confirmados en Argentina es de 4, de los cuales 2 fallecieron."), Report(4,2))
-        self.assertEqual(parse("El total de casos confirmados en Argentina es de treinta y seis (36), de los cuales dos (2) fallecieron."), Report(36,2))
-        self.assertEqual(parse("El total de casos confirmados en Argentina es de cuatro (4), de los cuales uno (1) falleció."), Report(4,1))
-        self.assertEqual(parse("A la fecha, se registran un total de 17 casos importados confirmados de COVID-19 entre los que se encuentra un (1) fallecido."), Report(17,1))
-        self.assertEqual(parse("A la fecha, se registran un total de diecisiete (17) casos importados confirmados de COVID-19 entre los que se encuentra un (1) fallecido."), Report(17,1))
-        self.assertEqual(parse("A la fecha, se registran un total de diecisiete (17) casos importados confirmados de COVID-19 entre los que se encuentran dos (2) fallecidos."), Report(17,2))
+        def do_test(text, cases, deaths):
+            report = parse(text)
+            self.assertEqual((report.cases, report.deaths), (cases, deaths))
+
+        do_test("El total de casos confirmados en Argentina es de 4, de los cuales 2 fallecieron.", 4,2)
+        do_test("El total de casos confirmados en Argentina es de treinta y seis (36), de los cuales dos (2) fallecieron.", 36,2)
+        do_test("El total de casos confirmados en Argentina es de cuatro (4), de los cuales uno (1) falleció.", 4,1)
+        do_test("A la fecha, se registran un total de 17 casos importados confirmados de COVID-19 entre los que se encuentra un (1) fallecido.", 17,1)
+        do_test("A la fecha, se registran un total de diecisiete (17) casos importados confirmados de COVID-19 entre los que se encuentra un (1) fallecido.", 17,1)
+        do_test("A la fecha, se registran un total de diecisiete (17) casos importados confirmados de COVID-19 entre los que se encuentran dos (2) fallecidos.", 17,2)
 
     def test_pdf(self):
         # end-to-end test
