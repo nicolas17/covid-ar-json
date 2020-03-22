@@ -13,17 +13,9 @@ def coalesce(*args):
 
 @attr.s
 class Report:
-    cases = attr.ib()
-    deaths = attr.ib()
+    cases = attr.ib(default=None)
+    deaths = attr.ib(default=None)
     pdf_filename = attr.ib(default=None)
-
-
-def handle_match(m):
-    logging.info("Matched sentence: '{}'".format(m.group(0)))
-    cases = int(coalesce(m.group('c1'), m.group('c2')))
-    deaths = int(coalesce(m.group('d1'), m.group('d2')))
-    logging.info("Extracted info: cases:{}, deaths:{}".format(cases, deaths))
-    return Report(cases=cases, deaths=deaths)
 
 def num_regex(capture_name):
     # handles '45' and 'cuarenta y cinco (45)' and 'veintiún (21)'
@@ -31,17 +23,26 @@ def num_regex(capture_name):
 
 def parse(text):
     text = text.replace('\n', ' ')
+
+    report = Report()
+
     m = re.search('El total de casos confi?rmados en Argenti?na es de '+num_regex('c')+'( casos)?, de los cuales '+num_regex('d')+' (fallecieron|falleció)', text)
+    if not m:
+        m = re.search('se registran un total de '+num_regex('c')+' casos importados confirmados de COVID-19 entre los que se encuentran? '+num_regex('d')+' fallecidos?', text)
+
+    if not m:
+        logging.warning("No regex matched!")
+
     if m:
-        return handle_match(m)
+        logging.info("Matched sentence: '{}'".format(m.group(0)))
+        cases = int(coalesce(m.group('c1'), m.group('c2')))
+        deaths = int(coalesce(m.group('d1'), m.group('d2')))
+        logging.info("Extracted info: cases:{}, deaths:{}".format(cases, deaths))
 
-    m = re.search('se registran un total de '+num_regex('c')+' casos importados confirmados de COVID-19 entre los que se encuentran? '+num_regex('d')+' fallecidos?', text)
-    if m:
-        return handle_match(m)
+        report.cases = cases
+        report.deaths = deaths
 
-    logging.warning("No regex matched!")
-
-    return None
+    return report
 
 def parse_text_file(filename):
     with open(filename, "r") as f:
