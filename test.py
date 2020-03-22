@@ -7,6 +7,7 @@ import re
 
 from textparser import *
 from pdfconvert import *
+from request import *
 
 class TestParser(unittest.TestCase):
 
@@ -34,6 +35,10 @@ class TestParser(unittest.TestCase):
     def test_pdf(self):
         # end-to-end test
         self.assertEqual(parse(text_from_pdf('16-03-20-reporte-diario-covid-19_0.pdf')), Report(65,2))
+
+    def test_html_header(self):
+        import datetime
+        self.assertEqual(date_from_header('Reporte Diario / 19-03-2020 (283.6 Kb)'), datetime.date(2020, 3, 19))
 
 if __name__ == '__main__':
     unittest.main()

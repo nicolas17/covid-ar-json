@@ -3,15 +3,36 @@
 # SPDX-License-Identifier: MIT
 
 import requests
+import logging
+import datetime
+import re
 from bs4 import BeautifulSoup
 
 sess = requests.session()
 
-def get_pdf_urls():
+def date_from_header(header_text):
+    match = re.match('Reporte Diario / (\d+)-(\d+)-(\d+) \(.*\)', header_text)
+    if match:
+        d = int(match.group(1))
+        m = int(match.group(2))
+        y = int(match.group(3))
+        return datetime.date(y,m,d)
+
+def get_pdfs():
     resp = sess.get("https://www.argentina.gob.ar/coronavirus/informe-diario", headers={'User-Agent': 'CovidParser/0.1 (+nicolas.alvarez+covid@gmail.com)'})
+    logging.info("Parsing HTML page")
     soup = BeautifulSoup(resp.content, 'html.parser')
-    for elem in soup.find('div', class_='downloads').find_all('a'):
-        yield elem["href"]
+
+    links = soup.find('div', class_='downloads').find_all('a')
+    logging.info("Found {} links".format(len(links)))
+
+    for elem in links:
+        url = elem["href"]
+        header = elem.parent.p
+        header_text = header.text
+        date = date_from_header(header_text)
+
+        yield (url, date)
 
 def download_file(url, fd):
     resp = sess.get(url, headers={'User-Agent': 'CovidParser/0.1 (+nicolas.alvarez+covid@gmail.com)'})

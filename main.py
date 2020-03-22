@@ -45,8 +45,9 @@ else:
 
 def handler(event, context):
     logging.info("Downloading list")
-    pdf_urls = list(request.get_pdf_urls())
-    pdf_url = pdf_urls[0]
+    pdf_urls = list(request.get_pdfs())
+    pdf_url, pdf_date = pdf_urls[0]
+    logging.info("PDF date: %s", pdf_date)
     logging.info("PDF URL: %s", pdf_url)
     with tempfile.NamedTemporaryFile(suffix='.pdf') as f:
         request.download_file(pdf_url, f)
