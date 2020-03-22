@@ -36,9 +36,18 @@ class TestParser(unittest.TestCase):
         do_test("A la fecha, se registran un total de diecisiete (17) casos importados confirmados de COVID-19 entre los que se encuentra un (1) fallecido.", 17,1)
         do_test("A la fecha, se registran un total de diecisiete (17) casos importados confirmados de COVID-19 entre los que se encuentran dos (2) fallecidos.", 17,2)
 
+    def test_parse_new(self):
+        report = parse("Hoy fueron confirmados 14 nuevos casos de COVID-19:")
+        self.assertEqual(report.new_cases, 14)
+        report = parse("Hoy fueron confirmados nueve (9) nuevos casos de COVID-19.")
+        self.assertEqual(report.new_cases, 9)
+
     def test_pdf(self):
         # end-to-end test
-        self.assertEqual(parse(text_from_pdf('16-03-20-reporte-diario-covid-19_0.pdf')), Report(65,2))
+        self.assertEqual(
+            parse(text_from_pdf('16-03-20-reporte-diario-covid-19_0.pdf')),
+            Report(cases=65, deaths=2, new_cases=9)
+        )
 
     def test_html_header(self):
         import datetime

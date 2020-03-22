@@ -15,6 +15,7 @@ def coalesce(*args):
 class Report:
     cases = attr.ib(default=None)
     deaths = attr.ib(default=None)
+    new_cases = attr.ib(default=None)
     pdf_filename = attr.ib(default=None)
 
 def num_regex(capture_name):
@@ -41,6 +42,12 @@ def parse(text):
 
         report.cases = cases
         report.deaths = deaths
+
+    m = re.search('Hoy fueron confirmados '+num_regex('n')+' nuevos casos de COVID-19', text)
+    if m:
+        logging.info("Matched sentence: '{}'".format(m.group(0)))
+        report.new_cases = int(coalesce(m.group('n1'), m.group('n2')))
+        logging.info("Extracted info: new_cases:{}".format(report.new_cases))
 
     return report
 
