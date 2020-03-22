@@ -103,4 +103,4 @@ resource "aws_lambda_permission" "allow_cloudwatch" {
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.covid_cloudwatch_timer.arn
 }
-  
+
