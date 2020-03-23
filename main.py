@@ -65,6 +65,10 @@ def handler(event, context):
     }
     output_json = json.dumps(output).encode('utf8')
 
+    if report.cases is None or report.deaths is None:
+        logging.warning("Couldn't get main data: {}".format(report))
+        return {'result': output, 'failed': 'main data was missing'}
+
     logging.info("Getting current file")
     current_data = get_file('covid-ar.json')
     if current_data == output_json:
