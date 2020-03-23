@@ -104,3 +104,22 @@ resource "aws_lambda_permission" "allow_cloudwatch" {
   source_arn    = aws_cloudwatch_event_rule.covid_cloudwatch_timer.arn
 }
 
+resource "aws_s3_bucket_policy" "nicolas17_bucket_policy" {
+  bucket = "nicolas17"
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::nicolas17/covid-ar.json",
+      "Condition": {
+         "IpAddress": {"aws:SourceIp": "181.95.149.29/32"}
+      }
+    }
+  ]
+}
+POLICY
+}
