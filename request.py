@@ -19,7 +19,7 @@ def date_from_header(header_text):
         return datetime.date(y,m,d)
 
 def get_pdfs():
-    resp = sess.get("https://www.argentina.gob.ar/coronavirus/informe-diario", headers={'User-Agent': 'CovidParser/0.1 (+nicolas.alvarez+covid@gmail.com)'})
+    resp = sess.get("https://www.argentina.gob.ar/coronavirus/informe-diario?cache-bust=%d" % datetime.datetime.now().minute, headers={'User-Agent': 'CovidParser/0.1 (+nicolas.alvarez+covid@gmail.com)'})
     logging.info("Parsing HTML page")
     soup = BeautifulSoup(resp.content, 'html.parser')
 
