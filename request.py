@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 sess = requests.session()
 
 def date_from_header(header_text):
-    match = re.match('Reporte Diario / (\d+)-(\d+)-(\d+) \(.*\)', header_text)
+    match = re.match('Reporte Diario (?:\w+ )?/ (\d+)-(\d+)-(\d+) \(.*\)', header_text)
     if match:
         d = int(match.group(1))
         m = int(match.group(2))
