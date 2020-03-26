@@ -27,7 +27,7 @@ def parse(text):
 
     report = Report()
 
-    m = re.search('El total de casos confi?rmados en Argenti?na es de '+num_regex('c')+'( casos)?\*?, de los cuales '+num_regex('d')+' (fallecieron|falleció)', text)
+    m = re.search('El total de casos confi?rmados en Argenti?na (a las \d+ horas de hoy )?es de '+num_regex('c')+'( casos)?(\*|\(*\)|, \(\*\))?, (de los cuales )?'+num_regex('d')+' (fallecieron|falleció)', text)
     if not m:
         m = re.search('se registran un total de '+num_regex('c')+' casos importados confirmados de COVID-19 entre los que se encuentran? '+num_regex('d')+' fallecidos?', text)
 
