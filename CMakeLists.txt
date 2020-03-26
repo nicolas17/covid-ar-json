@@ -58,11 +58,16 @@ add_custom_command(
     COMMAND cmake -E copy ${POPPLER_DIR}/bin/pdftotext destdir/pdftotext
     COMMENT "Copying pdftotext"
 )
+find_program(STRIP_NONDETERMINISM NAMES strip-nondeterminism)
+if (STRIP_NONDETERMINISM)
+    set(STRIP_COMMAND COMMAND "${STRIP_NONDETERMINISM}" "${CMAKE_BINARY_DIR}/function.zip")
+endif()
 
 add_custom_command(OUTPUT function.zip
     DEPENDS ${destdir_pyfiles} destdir/pdftotext pip
     WORKING_DIRECTORY destdir
     COMMAND cmake -E remove ${CMAKE_BINARY_DIR}/function.zip
     COMMAND zip -r ${CMAKE_BINARY_DIR}/function.zip .
+    ${STRIP_COMMAND}
 )
 add_custom_target(zip ALL DEPENDS function.zip)
