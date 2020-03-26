@@ -87,13 +87,22 @@ resource "aws_lambda_function" "update_covid_json" {
 }
 
 resource "aws_cloudwatch_event_rule" "covid_cloudwatch_timer" {
-  description = "Run Lambda function to update covid-ar.json"
+  description = "Hourly timer to trigger covid lambda"
 
   schedule_expression = "rate(60 minutes)"
+}
+resource "aws_cloudwatch_event_rule" "covid_cloudwatch_timer2" {
+  description = "More regular timer near 9pm-0300 to trigger covid lambda"
+
+  schedule_expression = "cron(0/10 0-1 * * ? *)"
 }
 
 resource "aws_cloudwatch_event_target" "cloudwatch_timer_target" {
   rule = aws_cloudwatch_event_rule.covid_cloudwatch_timer.name
+  arn = aws_lambda_function.update_covid_json.arn
+}
+resource "aws_cloudwatch_event_target" "cloudwatch_timer_target2" {
+  rule = aws_cloudwatch_event_rule.covid_cloudwatch_timer2.name
   arn = aws_lambda_function.update_covid_json.arn
 }
 
