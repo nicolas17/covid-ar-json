@@ -35,6 +35,8 @@ class TestParser(unittest.TestCase):
         do_test("A la fecha, se registran un total de 17 casos importados confirmados de COVID-19 entre los que se encuentra un (1) fallecido.", 17,1)
         do_test("A la fecha, se registran un total de diecisiete (17) casos importados confirmados de COVID-19 entre los que se encuentra un (1) fallecido.", 17,1)
         do_test("A la fecha, se registran un total de diecisiete (17) casos importados confirmados de COVID-19 entre los que se encuentran dos (2) fallecidos.", 17,2)
+        do_test("En nuestro país, el total de casos es de 690. Blah blah. La tasa de letalidad en el país es del 2,1%, habiéndose registrado un total de 17 fallecidos confirmados para COVID-19.",
+                690, 17)
 
     def test_parse_new(self):
         report = parse("Hoy fueron confirmados 14 nuevos casos de COVID-19:")

@@ -37,6 +37,15 @@ def parse_main_totals(text, report):
         report.deaths = int(coalesce(m.group('d1'), m.group('d2')))
         return True
 
+    m1 = re.search("En nuestro pa[ií]s,? el total de casos es de (\d+)", text)
+    m2 = re.search("registrado un total de (\d+) fallecidos confirmados para COVID-19", text)
+    if m1 and m2:
+        logging.info("Matched sentence 1: '{}'".format(m1.group(0)))
+        logging.info("Matched sentence 2: '{}'".format(m2.group(0)))
+        report.cases = int(m1.group(1))
+        report.deaths = int(m2.group(1))
+        return True
+
     return False
 
 def parse(text):
