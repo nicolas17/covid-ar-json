@@ -92,9 +92,9 @@ resource "aws_cloudwatch_event_rule" "covid_cloudwatch_timer" {
   schedule_expression = "rate(60 minutes)"
 }
 resource "aws_cloudwatch_event_rule" "covid_cloudwatch_timer2" {
-  description = "More regular timer near 9pm-0300 to trigger covid lambda"
+  description = "More regular timer near 10pm (UTC-3) to trigger covid lambda"
 
-  schedule_expression = "cron(0/10 0-1 * * ? *)"
+  schedule_expression = "cron(0/10 1-2 * * ? *)"
 }
 
 resource "aws_cloudwatch_event_target" "cloudwatch_timer_target" {
