@@ -50,6 +50,7 @@ def parse_main_totals(text, report):
 
 def parse(text):
     text = text.replace('\n', ' ')
+    text = text.replace('\u200b', '') # zero-width space
 
     report = Report()
 
